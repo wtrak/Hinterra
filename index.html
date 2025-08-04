@@ -1,9 +1,8 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Hinterra - Portable Power Solutions</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
@@ -22,21 +21,33 @@
     }
     section {
       padding: 40px 20px;
-      max-width: 900px;
+      max-width: 1200px;
       margin: auto;
     }
-    section img {
+    .image-specs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 40px;
+      align-items: flex-start;
+      justify-content: center;
+    }
+    .image-specs img {
       max-width: 100%;
-      height: auto;
+      width: 480px;
       border-radius: 10px;
+      flex-shrink: 0;
     }
-    h2 {
-      text-align: center;
+    .specs-list {
+      max-width: 500px;
+    }
+    .specs-list h2 {
       font-weight: 600;
+      margin-top: 0;
     }
-    ul {
+    .specs-list ul {
       font-size: 1.05em;
       line-height: 1.8;
+      padding-left: 20px;
     }
     p {
       font-size: 1.1em;
@@ -57,7 +68,21 @@
 </header>
 
 <section>
-  <img src="kit_deployed.png" alt="Hinterra Kit Deployed">
+  <div class="image-specs">
+    <img src="kit_deployed.png" alt="Hinterra Kit Deployed">
+    <div class="specs-list">
+      <h2>Technical Specifications</h2>
+      <ul>
+        <li><strong>Case:</strong> Waterproof, Crush-Resistant</li>
+        <li><strong>Solar Panel:</strong> 40 Watts, Foldable, 3–4 Hours To Full Charge</li>
+        <li><strong>Battery Unit:</strong> 8300mAh, USB + DC Out</li>
+        <li><strong>Floodlight:</strong> 900lm, 120° Beam Angle, 9 Hours Runtime</li>
+        <li><strong>Outputs:</strong> 1× DC 12V, 1× USB Port (expandable via hub)</li>
+        <li><strong>Deployment Time:</strong> Under 2 Minutes</li>
+        <li><strong>Use Cases:</strong> Remote Lighting, Device Charging, Field Comms, Recon Gear, Clinics</li>
+      </ul>
+    </div>
+  </div>
 </section>
 
 <section>
@@ -69,19 +94,6 @@
     Trusted by remote construction crews, security teams, field medics, and adventurers, our systems are engineered
     for one mission: dependable, off-grid power where it matters most.
   </p>
-</section>
-
-<section>
-  <h2>Technical Specifications</h2>
-  <ul>
-    <li><strong>Case:</strong> Waterproof, Crush-Resistant. </li>
-    <li><strong>Solar Panel:</strong> 40 Watts, Foldable, 3-4 Hours To Full Charge "</li>
-    <li><strong>Battery Unit:</strong> 8300mAh, USB + DC out</li>
-    <li><strong>Floodlight:</strong> 900lm, 120deg Beam Angle, 9 Hours(with full charge) </li>
-    <li><strong>Outputs:</strong> 1x DC 12v | 1x USB Ports (expandable via hub)</li>
-    <li><strong>Deployment Time:</strong> Under 2 minutes</li>
-    <li><strong>Use Cases:</strong> Remote lighting, USB device charging, field comms, recon gear, mobile clinics</li>
-  </ul>
 </section>
 
 <footer>
