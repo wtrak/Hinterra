@@ -12,18 +12,58 @@
       background-color: #fff;
       color: #222;
     }
+
     header {
       text-align: center;
       padding: 20px;
     }
+
     header img {
       height: 450px;
     }
+
     section {
       padding: 40px 20px;
       max-width: 1200px;
       margin: auto;
     }
+
+    .carousel-container {
+      position: relative;
+      width: 800px;
+      max-width: 100%;
+      margin-right: 40px;
+      flex-shrink: 0;
+    }
+
+    .carousel-slide {
+      display: none;
+      width: 100%;
+      border-radius: 10px;
+    }
+
+    .carousel-slide.active {
+      display: block;
+    }
+
+    .carousel-controls {
+      position: absolute;
+      top: 50%;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      transform: translateY(-50%);
+    }
+
+    .carousel-controls button {
+      background: rgba(0,0,0,0.6);
+      color: #fff;
+      border: none;
+      padding: 8px 12px;
+      cursor: pointer;
+      font-size: 1.2em;
+    }
+
     .image-specs {
       display: flex;
       flex-wrap: wrap;
@@ -31,33 +71,43 @@
       align-items: flex-start;
       justify-content: center;
     }
-    .image-specs img {
-      max-width: 100%;
-      width: 800px;
-      border-radius: 10px;
-      flex-shrink: 0;
-    }
+
     .specs-list {
       max-width: 500px;
     }
+
     .specs-list h2 {
       font-weight: 600;
       margin-top: 0;
     }
+
     .specs-list ul {
       font-size: 1.05em;
       line-height: 1.8;
       padding-left: 20px;
     }
+
     p {
       font-size: 1.1em;
       line-height: 1.6;
     }
+
     footer {
       text-align: center;
       padding: 20px;
       font-size: 0.9em;
       color: #777;
+    }
+
+    @media (max-width: 900px) {
+      .image-specs {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .carousel-container {
+        margin-right: 0;
+      }
     }
   </style>
 </head>
@@ -69,7 +119,18 @@
 
 <section>
   <div class="image-specs">
-    <img src="kit_deployed.png" alt="Hinterra Kit Deployed">
+    <div class="carousel-container">
+      <img class="carousel-slide active" src="kit_deployed1.png" alt="Hinterra Kit Deployment 1">
+      <img class="carousel-slide" src="kit_deployed2.png" alt="Hinterra Kit Deployment 2">
+      <img class="carousel-slide" src="kit_deployed3.png" alt="Hinterra Kit Deployment 3">
+      <img class="carousel-slide" src="kit_deployed4.png" alt="Hinterra Kit Deployment 4">
+
+      <div class="carousel-controls">
+        <button onclick="prevSlide()">‹</button>
+        <button onclick="nextSlide()">›</button>
+      </div>
+    </div>
+
     <div class="specs-list">
       <h2>Technical Specifications</h2>
       <ul>
@@ -100,6 +161,26 @@
   © 2025 Hinterra. All rights reserved.
 </footer>
 
+<script>
+  let currentSlide = 0;
+  const slides = document.querySelectorAll('.carousel-slide');
+
+  function showSlide(index) {
+    slides.forEach((slide, i) => {
+      slide.classList.toggle('active', i === index);
+    });
+  }
+
+  function nextSlide() {
+    currentSlide = (currentSlide + 1) % slides.length;
+    showSlide(currentSlide);
+  }
+
+  function prevSlide() {
+    currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+    showSlide(currentSlide);
+  }
+</script>
+
 </body>
-</html>
 </html>
