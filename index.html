@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>Hinterra — Rugged Portable Power Kits</title>
-  <meta name="description" content="Carry-on portable solar + battery kits for remote ops. 40W panel, 100Wh battery, 12V DC & USB outputs. Deploy in minutes for mining, security, field, and clinic use." />
+  <meta name="description" content="Carry-on portable solar + battery kits for remote ops. 40W panel, ~100Wh battery, 12V DC & USB outputs. Deploy in minutes for mining, security, field, and clinic use." />
 
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -27,17 +27,45 @@
 
     /* Nav */
     header{
-      position:sticky; top:0; z-index:100; background:color-mix(in oklab, var(--bg) 92%, transparent);
-      backdrop-filter:saturate(180%) blur(8px); border-bottom:1px solid var(--line);
+      position:sticky; top:0; z-index:1000;
+      background:color-mix(in oklab, var(--bg) 92%, transparent);
+      backdrop-filter:saturate(180%) blur(8px);
+      -webkit-backdrop-filter:saturate(180%) blur(8px);
+      border-bottom:1px solid var(--line);
     }
     .nav{display:flex; gap:16px; align-items:center; justify-content:space-between; height:64px}
-    .brand{display:flex; gap:10px; align-items:center; font-weight:700}
+    .brand{display:flex; gap:10px; align-items:center; font-weight:700; white-space:nowrap}
     .brand img{height:28px}
-    .menu{display:flex; gap:18px; align-items:center; flex-wrap:wrap}
-    .menu a{padding:8px 10px; border-radius:8px; font-weight:600; opacity:.88}
+    .brand-text{color:var(--brand)}
+    .menu{display:flex; gap:18px; align-items:center; flex-wrap:nowrap}
+    .menu a{padding:8px 10px; border-radius:8px; font-weight:600; opacity:.88; white-space:nowrap}
     .menu a.active{outline:1px solid var(--fg); opacity:1}
     .cta{padding:8px 12px; border:1px solid var(--fg); border-radius:8px; font-weight:600}
     .cta.primary{background:var(--accent); color:var(--bg); border-color:var(--accent)}
+
+    /* Hamburger + mobile panel */
+    .hamburger{
+      display:none;
+      appearance:none; border:1px solid var(--line); background:var(--bg); color:var(--fg);
+      border-radius:8px; padding:8px 10px; font-size:20px; line-height:1; cursor:pointer;
+    }
+    .menu-panel{
+      position:fixed; left:0; right:0; top:64px;
+      background:var(--bg); border-bottom:1px solid var(--line);
+      display:grid; gap:6px; padding:12px 16px;
+      transform:translateY(-120%); opacity:0; pointer-events:none;
+      transition:transform .22s ease, opacity .22s ease;
+      box-shadow:0 10px 24px rgba(0,0,0,.08);
+    }
+    .menu-panel a{padding:10px 12px; border-radius:8px; font-weight:600}
+    .menu-panel .cta{margin-top:6px}
+    .menu-panel.open{transform:translateY(0); opacity:1; pointer-events:auto}
+    body.nav-open{overflow:hidden}
+
+    @media (max-width: 960px){
+      .menu{display:none}
+      .hamburger{display:inline-block}
+    }
 
     /* Sections */
     section{scroll-margin-top:80px; padding:56px 0}
@@ -89,8 +117,13 @@
 <header>
   <nav class="container nav" aria-label="Primary">
     <a href="#top" class="brand" aria-label="Hinterra Home">
-      <img src="logo.png" alt="Hinterra logo"><span style="color:var(--brand)">Hinterra</span>
+      <img src="logo.png" alt="Hinterra logo"><span class="brand-text">Hinterra</span>
     </a>
+
+    <!-- Hamburger (mobile) -->
+    <button class="hamburger" id="hamburger" aria-label="Open menu" aria-controls="menuPanel" aria-expanded="false">☰</button>
+
+    <!-- Desktop menu -->
     <div class="menu" id="menu">
       <a href="#specs" data-nav>Specs</a>
       <a href="#applications" data-nav>Applications</a>
@@ -102,6 +135,18 @@
       <a class="cta primary" href="#store">Purchase</a>
     </div>
   </nav>
+
+  <!-- Mobile slide-down panel -->
+  <div class="menu-panel" id="menuPanel">
+    <a href="#specs" data-nav>Specs</a>
+    <a href="#applications" data-nav>Applications</a>
+    <a href="#media" data-nav>Media</a>
+    <a href="#store" data-nav>Store</a>
+    <a href="#about" data-nav>About</a>
+    <a href="#contact" data-nav>Contact</a>
+    <a class="cta" href="Hinterra_SpecSheet.pdf" download>Spec Sheet</a>
+    <a class="cta primary" href="#store">Purchase</a>
+  </div>
 </header>
 
 <main>
@@ -358,7 +403,6 @@
     const links = Array.from(document.querySelectorAll('[data-nav]'));
     const ids = links.map(a => a.getAttribute('href')).filter(h => h.startsWith('#'));
     const sections = ids.map(id => document.querySelector(id)).filter(Boolean);
-    const menu = document.getElementById('menu');
 
     const io = new IntersectionObserver((entries)=>{
       entries.forEach(entry=>{
@@ -372,13 +416,30 @@
     }, { rootMargin: '-50% 0px -45% 0px', threshold: [0, 0.1, 0.5, 1] });
 
     sections.forEach(sec => io.observe(sec));
+  })();
 
-    // Optional: close mobile menu on click (if you add a hamburger later)
-    menu.addEventListener('click', e=>{
-      const t = e.target.closest('a[data-nav]');
-      if(!t) return;
-      // default smooth behavior handled by CSS
-    });
+  // Mobile menu toggle
+  (function(){
+    const btn = document.getElementById('hamburger');
+    const panel = document.getElementById('menuPanel');
+    const panelLinks = panel.querySelectorAll('a');
+
+    function openMenu(){
+      panel.classList.add('open');
+      document.body.classList.add('nav-open');
+      btn.setAttribute('aria-expanded', 'true');
+      btn.setAttribute('aria-label', 'Close menu');
+    }
+    function closeMenu(){
+      panel.classList.remove('open');
+      document.body.classList.remove('nav-open');
+      btn.setAttribute('aria-expanded', 'false');
+      btn.setAttribute('aria-label', 'Open menu');
+    }
+
+    btn.addEventListener('click', ()=> panel.classList.contains('open') ? closeMenu() : openMenu());
+    panelLinks.forEach(a => a.addEventListener('click', closeMenu));
+    document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeMenu(); });
   })();
 
   // Store: simple Buy Now handler
