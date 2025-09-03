@@ -1,298 +1,404 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" id="top">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Hinterra - Portable Power Solutions</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Hinterra — Rugged Portable Power Kits</title>
+  <meta name="description" content="Carry-on portable solar + battery kits for remote ops. 40W panel, 100Wh battery, 12V DC & USB outputs. Deploy in minutes for mining, security, field, and clinic use." />
+
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="icon" href="favicon.ico">
+
   <style>
-    body {
-      margin: 0;
-      font-family: 'Inter', sans-serif;
-      background-color: #fff;
-      color: #222;
+    :root{
+      --bg:#fff; --fg:#1b1b1b; --muted:#6d6d6d; --line:#e9e9e9; --soft:#f7f7f7; --accent:#111;
+      --brand:#0f0f0f;
     }
-
-    header {
-      text-align: center;
-      padding: 10px;
+    @media (prefers-color-scheme: dark){
+      :root{ --bg:#0e0e0e; --fg:#e9e9e9; --muted:#a9a9a9; --line:#202020; --soft:#141414; --accent:#fff; --brand:#fff; }
     }
+    *{box-sizing:border-box}
+    html,body{margin:0;background:var(--bg);color:var(--fg);font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+    html{scroll-behavior:smooth}
+    a{color:inherit;text-decoration:none}
+    .container{max-width:1200px;margin:auto;padding:0 20px}
 
-    header img {
-      height: 250px;
+    /* Nav */
+    header{
+      position:sticky; top:0; z-index:100; background:color-mix(in oklab, var(--bg) 92%, transparent);
+      backdrop-filter:saturate(180%) blur(8px); border-bottom:1px solid var(--line);
     }
+    .nav{display:flex; gap:16px; align-items:center; justify-content:space-between; height:64px}
+    .brand{display:flex; gap:10px; align-items:center; font-weight:700}
+    .brand img{height:28px}
+    .menu{display:flex; gap:18px; align-items:center; flex-wrap:wrap}
+    .menu a{padding:8px 10px; border-radius:8px; font-weight:600; opacity:.88}
+    .menu a.active{outline:1px solid var(--fg); opacity:1}
+    .cta{padding:8px 12px; border:1px solid var(--fg); border-radius:8px; font-weight:600}
+    .cta.primary{background:var(--accent); color:var(--bg); border-color:var(--accent)}
 
-    section {
-      padding: 40px 20px;
-      max-width: 1200px;
-      margin: auto;
-    }
+    /* Sections */
+    section{scroll-margin-top:80px; padding:56px 0}
+    .hero{padding:36px 0 8px}
+    .hero-grid{display:flex; gap:36px; align-items:flex-start; flex-wrap:wrap}
+    .carousel{position:relative; width:800px; max-width:100%; flex:1 1 520px}
+    .carousel img{display:none; width:100%; border-radius:12px; border:1px solid var(--line); background:var(--soft)}
+    .carousel img.active{display:block}
+    .carousel .ctrl{position:absolute; inset:0; display:flex; justify-content:space-between; align-items:center; pointer-events:none}
+    .carousel button{pointer-events:auto; background:rgba(0,0,0,.6); color:#fff; border:none; padding:10px 12px; border-radius:8px; font-size:20px; cursor:pointer}
+    .specs{flex:1 1 360px; max-width:520px}
+    .specs h1{margin:0 0 8px; font-size:clamp(28px,4vw,40px)}
+    .lead{font-size:1.08rem; color:var(--muted); margin:6px 0 16px}
+    .specs ul{margin:0; padding-left:18px; line-height:1.8}
+    .note{font-size:.92rem; color:var(--muted)}
+    .band{background:var(--soft); border-top:1px solid var(--line); border-bottom:1px solid var(--line)}
+    .usecases{display:flex; flex-direction:column; gap:56px}
+    .uc{display:flex; gap:36px; align-items:center; flex-wrap:wrap}
+    .uc.reverse{flex-direction:row-reverse}
+    .uc img{width:100%; border-radius:12px; border:1px solid var(--line); max-width:520px}
+    table{width:100%; border-collapse:collapse; margin-top:10px; font-size:.98rem}
+    th,td{padding:10px; border-bottom:1px solid var(--line); text-align:left}
+    th{background:color-mix(in oklab, var(--soft) 92%, transparent); font-weight:600}
+    caption{caption-side:top; text-align:left; font-weight:600; margin-bottom:6px}
 
-    .carousel-container {
-      position: relative;
-      width: 800px;
-      max-width: 100%;
-      margin-right: 40px;
-      flex-shrink: 0;
-    }
+    /* Media grid */
+    .media-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(260px,1fr)); gap:20px}
+    .card{border:1px solid var(--line); border-radius:12px; padding:14px; background:var(--bg)}
+    .card h4{margin:8px 0 6px}
+    .card p{margin:0 0 10px; color:var(--muted); font-size:.95rem}
+    .card .thumb{border-radius:8px; width:100%; aspect-ratio:16/9; object-fit:cover; border:1px solid var(--line); background:var(--soft)}
 
-    .carousel-slide {
-      display: none;
-      width: 100%;
-      border-radius: 10px;
-    }
+    /* Store */
+    .store-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(280px,1fr)); gap:24px}
+    .price{font-weight:700; font-size:1.2rem; margin:6px 0 12px}
+    .buyrow{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
+    input.qty{width:84px; padding:8px; border:1px solid var(--line); border-radius:8px; background:var(--bg); color:var(--fg)}
 
-    .carousel-slide.active {
-      display: block;
-    }
+    /* Contact */
+    form{display:grid; gap:12px; max-width:680px}
+    input, textarea{padding:12px; border:1px solid var(--line); border-radius:8px; background:var(--bg); color:var(--fg); font:inherit}
+    textarea{min-height:120px; resize:vertical}
 
-    .carousel-controls {
-      position: absolute;
-      top: 50%;
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      transform: translateY(-50%);
-    }
-
-    .carousel-controls button {
-      background: rgba(0,0,0,0.6);
-      color: #fff;
-      border: none;
-      padding: 8px 12px;
-      cursor: pointer;
-      font-size: 1.2em;
-    }
-
-    .image-specs {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 40px;
-      align-items: flex-start;
-      justify-content: center;
-    }
-
-    .specs-list {
-      max-width: 500px;
-    }
-
-    .specs-list h2 {
-      font-weight: 600;
-      margin-top: 0;
-    }
-
-    .specs-list ul {
-      font-size: 1.05em;
-      line-height: 1.8;
-      padding-left: 20px;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 10px;
-    }
-
-    table th, table td {
-      text-align: left;
-      padding: 8px;
-      border-bottom: 1px solid #ddd;
-    }
-
-    table th {
-      background-color: #f0f0f0;
-      font-weight: 600;
-    }
-
-    p {
-      font-size: 1.1em;
-      line-height: 1.6;
-    }
-
-    footer {
-      text-align: center;
-      padding: 20px;
-      font-size: 0.9em;
-      color: #777;
-    }
-
-    @media (max-width: 900px) {
-      .image-specs {
-        flex-direction: column;
-        align-items: center;
-      }
-
-      .carousel-container {
-        margin-right: 0;
-      }
-    }
+    footer{padding:28px 0; text-align:center; color:var(--muted); font-size:.92rem}
   </style>
 </head>
 <body>
 
 <header>
-  <img src="logo.png" alt="Hinterra Logo">
+  <nav class="container nav" aria-label="Primary">
+    <a href="#top" class="brand" aria-label="Hinterra Home">
+      <img src="logo.png" alt="Hinterra logo"><span style="color:var(--brand)">Hinterra</span>
+    </a>
+    <div class="menu" id="menu">
+      <a href="#specs" data-nav>Specs</a>
+      <a href="#applications" data-nav>Applications</a>
+      <a href="#media" data-nav>Media</a>
+      <a href="#store" data-nav>Store</a>
+      <a href="#about" data-nav>About</a>
+      <a href="#contact" data-nav>Contact</a>
+      <a class="cta" href="Hinterra_SpecSheet.pdf" download>Spec Sheet</a>
+      <a class="cta primary" href="#store">Purchase</a>
+    </div>
+  </nav>
 </header>
 
-<section>
-  <div class="image-specs">
-    <div class="carousel-container">
-      <img class="carousel-slide active" src="kit_deployed1.png" alt="Hinterra Kit Deployment 1">
-      <img class="carousel-slide" src="kit_deployed2.png" alt="Hinterra Kit Deployment 2">
-      <img class="carousel-slide" src="kit_deployed3.jpg" alt="Hinterra Kit Deployment 3">
-      <img class="carousel-slide" src="kit_deployed4.jpg" alt="Hinterra Kit Deployment 4">
+<main>
+  <!-- HERO + SPECS -->
+  <section class="hero" id="specs">
+    <div class="container hero-grid">
+      <div class="carousel" aria-roledescription="carousel" aria-label="Product images">
+        <img class="active" src="kit_deployed1.png" alt="Hinterra kit deployed in the field" loading="eager">
+        <img src="kit_deployed2.png" alt="Foldable 40W solar panel charging battery" loading="lazy">
+        <img src="kit_deployed3.jpg" alt="Case, battery, and floodlight layout" loading="lazy">
+        <img src="kit_deployed4.jpg" alt="Deployed kit powering devices" loading="lazy">
+        <div class="ctrl">
+          <button type="button" aria-label="Previous image" id="prevBtn">‹</button>
+          <button type="button" aria-label="Next image" id="nextBtn">›</button>
+        </div>
+      </div>
 
-      <div class="carousel-controls">
-        <button onclick="prevSlide()">‹</button>
-        <button onclick="nextSlide()">›</button>
+      <div class="specs">
+        <h1>Portable Power, Anywhere</h1>
+        <p class="lead">Carry-on kit with 40W foldable panel and ~100Wh battery. Power lights, radios, GPS, and phones. Deploy in minutes for mining, security, and field ops.</p>
+        <h2>Technical Specifications</h2>
+        <ul>
+          <li><strong>Case:</strong> Waterproof, crush-resistant</li>
+          <li><strong>Solar Panel:</strong> 40W foldable; ~4–5 h full charge in good sun</li>
+          <li><strong>Battery:</strong> ~100Wh (≈8,300mAh @12V class), USB & 12V I/O</li>
+          <li><strong>Primary Output:</strong> 12V DC port (up to 6A)</li>
+          <li><strong>Panel Outputs:</strong> USB-A + USB-C for direct device charging while charging the battery</li>
+          <li><strong>Floodlight:</strong> ~900 lm, 120° beam, ~9–9.5 h runtime per full charge</li>
+          <li><strong>Deployment Time:</strong> Under 2 minutes</li>
+          <li><strong>Use Cases:</strong> Remote lighting, device charging, field comms, recon gear, clinics</li>
+        </ul>
+        <p class="note">Prototype measurements; minor changes may occur in production.</p>
       </div>
     </div>
+  </section>
 
-    <div class="specs-list">
-      <h2>Technical Specifications</h2>
-      <ul>
-        <li><strong>Case:</strong> Waterproof, Crush-Resistant</li>
-        <li><strong>Solar Panel:</strong> 40 Watts, Foldable, 3–4 Hours To Full Charge</li>
-        <li><strong>Battery Unit:</strong> 8300mAh, USB + DC Out</li>
-        <li><strong>Floodlight:</strong> 900lm, 120° Beam Angle, 9 Hours Runtime</li>
-        <li><strong>Outputs:</strong> 1× DC 12V, 1× USB Port (expandable via hub)</li>
-        <li><strong>Deployment Time:</strong> Under 2 Minutes</li>
-        <li><strong>Use Cases:</strong> Remote Lighting, Device Charging, Field Comms, Recon Gear, Clinics</li>
-      </ul>
-    </div>
-  </div>
-</section>
+  <!-- APPLICATIONS -->
+  <section class="band" id="applications">
+    <div class="container">
+      <h2 style="margin:0 0 24px">Real-World Applications</h2>
+      <div class="usecases">
 
-<!-- NEW SECTION: Real-World Applications -->
+        <article class="uc">
+          <img src="placeholder_fieldcrews.jpeg" alt="Remote field crew using portable kit" loading="lazy">
+          <div>
+            <h3>Remote Field Crews</h3>
+            <p><strong>Problem:</strong> Radios/GPS/phones die, causing downtime and safety risks.</p>
+            <p><strong>Solution:</strong> Self-contained power anywhere.</p>
+            <table>
+              <caption>Cost & Risk Comparison</caption>
+              <thead><tr><th>Power Method</th><th>1-Year Cost</th><th>Drawbacks</th></tr></thead>
+              <tbody>
+                <tr><td>Diesel Generator</td><td>$1,800–$2,400</td><td>Fuel, noise, theft risk</td></tr>
+                <tr><td>Battery Rotation</td><td>$900+</td><td>Labor-intensive</td></tr>
+                <tr><td><strong>Hinterra Kit</strong></td><td><strong>$250</strong></td><td>One-time purchase</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
 
-<section style="background-color:#f9f9f9; padding: 60px 20px;">
-  <h2 style="text-align:center; font-size:2em; margin-bottom:40px;">Real-World Applications for Industrial and Mining Use</h2>
+        <article class="uc reverse">
+          <img src="placeholder_security.webp" alt="Security outpost lit at night" loading="lazy">
+          <div>
+            <h3>Security Outposts & Perimeter</h3>
+            <p><strong>Problem:</strong> Poor lighting and dead radios increase vulnerability.</p>
+            <p><strong>Solution:</strong> Night-ready lighting + device charging in minutes.</p>
+            <table>
+              <caption>Deployment Alternatives</caption>
+              <thead><tr><th>Power Method</th><th>Annual Cost</th><th>Drawbacks</th></tr></thead>
+              <tbody>
+                <tr><td>Grid Extension</td><td>$3,000–$6,000</td><td>Infeasible in rough terrain</td></tr>
+                <tr><td>Diesel Lighting</td><td>$1,500+</td><td>Fuel & maintenance</td></tr>
+                <tr><td><strong>Hinterra Kit</strong></td><td><strong>$250</strong></td><td>Deployable in minutes</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
 
-  <div style="max-width:1200px; margin:auto; display:flex; flex-direction:column; gap:60px;">
-    
-    <!-- Use Case 1: Remote Field Crews -->
-    <div style="display:flex; flex-wrap:wrap; align-items:center; gap:40px;">
-      <div style="flex:1; min-width:300px;"><img src="placeholder_fieldcrews.jpeg" alt="Remote Field Crews" style="width:100%; border-radius:10px;"></div>
-      <div style="flex:2; min-width:300px;">
-        <h3>Remote Field Crews</h3>
-        <p><strong>Problem:</strong> No power for radios, GPS, or phones causes downtime and safety issues.</p>
-        <p><strong>Solution:</strong> Portable solar kits supply essential power in any terrain.</p>
-        <table>
-          <tr><th>Power Method</th><th>1-Year Cost</th><th>Drawbacks</th></tr>
-          <tr><td>Diesel Generator</td><td>$1,800–$2,400</td><td>Fuel, noise, theft risk</td></tr>
-          <tr><td>Battery Rotation</td><td>$900+</td><td>Labor intensive</td></tr>
-          <tr><td><strong>Hinterra Kit</strong></td><td><strong>$250</strong></td><td>One-time purchase</td></tr>
-        </table>
+        <article class="uc">
+          <img src="placeholder_workerhousing.png" alt="Worker housing illuminated by portable lights" loading="lazy">
+          <div>
+            <h3>Worker Housing & Temporary Camps</h3>
+            <p><strong>Problem:</strong> No light/charging hurts morale and productivity.</p>
+            <p><strong>Solution:</strong> Personal kits deliver clean light & charging.</p>
+            <table>
+              <caption>Housing Power Options</caption>
+              <thead><tr><th>Solution</th><th>Annual Cost</th><th>Scalability</th></tr></thead>
+              <tbody>
+                <tr><td>Grid Wiring</td><td>$1,200+</td><td>Low</td></tr>
+                <tr><td>Fuel Lamps + Batteries</td><td>$800</td><td>Medium</td></tr>
+                <tr><td><strong>Hinterra Kit</strong></td><td><strong>$250</strong></td><td>High</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
+
+        <article class="uc reverse">
+          <img src="placeholder_community.jpg" alt="Community clinic with donated kit" loading="lazy">
+          <div>
+            <h3>Community Clinics & Schools</h3>
+            <p><strong>Problem:</strong> Villages near sites lack basic power.</p>
+            <p><strong>Solution:</strong> Donation-ready kits for clinics and classrooms.</p>
+            <table>
+              <caption>CSR Strategy Comparison</caption>
+              <thead><tr><th>Strategy</th><th>Cost/Unit</th><th>Impact</th></tr></thead>
+              <tbody>
+                <tr><td>Grid Access Subsidy</td><td>$1,000–$3,000</td><td>Slow, expensive</td></tr>
+                <tr><td>Fuel Donation</td><td>$500+/year</td><td>Recurring, low visibility</td></tr>
+                <tr><td><strong>Hinterra Kit</strong></td><td><strong>$250</strong></td><td>Immediate, visible, durable</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
       </div>
     </div>
+  </section>
 
-    <!-- Use Case 2: Security Outposts -->
-    <div style="display:flex; flex-wrap:wrap; align-items:center; gap:40px; flex-direction:row-reverse;">
-      <div style="flex:1; min-width:300px;"><img src="placeholder_security.webp" alt="Security Outposts" style="width:100%; border-radius:10px;"></div>
-      <div style="flex:2; min-width:300px;">
-        <h3>Security Outposts & Perimeter Stations</h3>
-        <p><strong>Problem:</strong> Poor lighting and dead radios increase vulnerability.</p>
-        <p><strong>Solution:</strong> Self-contained lighting and charging for night operations.</p>
-        <table>
-          <tr><th>Power Method</th><th>Annual Cost</th><th>Drawbacks</th></tr>
-          <tr><td>Grid Extension</td><td>$3,000–$6,000</td><td>Infeasible in remote terrain</td></tr>
-          <tr><td>Diesel Lighting</td><td>$1,500+</td><td>Fuel and maintenance</td></tr>
-          <tr><td><strong>Hinterra Kit</strong></td><td><strong>$250</strong></td><td>Deployable in minutes</td></tr>
-        </table>
+  <!-- MEDIA -->
+  <section id="media">
+    <div class="container">
+      <h2>Media — How-To & Setup Guides</h2>
+      <p class="lead">Short videos and one-page setup guides for rapid deployment.</p>
+      <div class="media-grid">
+        <!-- Video (self-hosted) -->
+        <div class="card">
+          <video class="thumb" controls poster="thumb_howto.jpg">
+            <source src="howto.mp4" type="video/mp4">
+          </video>
+          <h4>Setup: Solar → Battery → Load (12V)</h4>
+          <p>Step-by-step: connect DC5521 from panel to battery 12V/6A I/O, then power the floodlight.</p>
+          <a class="cta" href="Setup_OnePager.pdf" download>Download 1-Page Guide</a>
+        </div>
+        <!-- YouTube/Vimeo embed (optional) -->
+        <div class="card">
+          <iframe class="thumb" src="https://www.youtube.com/embed/VIDEO_ID?rel=0" title="Hinterra kit overview" allowfullscreen loading="lazy"></iframe>
+          <h4>Hinterra Kit Overview</h4>
+          <p>What’s in the case, typical runtimes, and best-practice charging.</p>
+          <a class="cta" href="Hinterra_SpecSheet.pdf" download>Spec Sheet (PDF)</a>
+        </div>
+        <!-- More guides -->
+        <div class="card">
+          <img class="thumb" src="thumb_troubleshoot.jpg" alt="Troubleshooting guide" loading="lazy">
+          <h4>Troubleshooting Quick Reference</h4>
+          <p>Common issues: low sun input, cable polarity, over-current protection.</p>
+          <a class="cta" href="Troubleshooting_QuickRef.pdf" download>Download PDF</a>
+        </div>
       </div>
     </div>
+  </section>
 
-    <!-- Use Case 3: Worker Housing -->
-    <div style="display:flex; flex-wrap:wrap; align-items:center; gap:40px;">
-      <div style="flex:1; min-width:300px;"><img src="placeholder_workerhousing.png" alt="Worker Housing" style="width:100%; border-radius:10px;"></div>
-      <div style="flex:2; min-width:300px;">
-        <h3>Worker Housing & Temporary Camps</h3>
-        <p><strong>Problem:</strong> Lack of lighting and charging impacts morale and productivity.</p>
-        <p><strong>Solution:</strong> Personal solar kits provide clean light and device charging in shared or remote housing.</p>
-        <table>
-          <tr><th>Solution</th><th>Annual Cost</th><th>Scalability</th></tr>
-          <tr><td>Grid Wiring</td><td>$1,200+</td><td>Low</td></tr>
-          <tr><td>Fuel Lamps + Batteries</td><td>$800</td><td>Medium</td></tr>
-          <tr><td><strong>Hinterra Kit</strong></td><td><strong>$250</strong></td><td>High</td></tr>
-        </table>
+  <!-- STORE -->
+  <section class="band" id="store">
+    <div class="container">
+      <h2>Store — Purchase</h2>
+      <p class="lead">Buy direct or send a purchase order. Bulk pricing available.</p>
+
+      <div class="store-grid">
+        <!-- Product card -->
+        <div class="card">
+          <img class="thumb" src="kit_deployed1.png" alt="Hinterra Portable Power Kit" loading="lazy">
+          <h3 style="margin:10px 0 4px">Hinterra Portable Power Kit</h3>
+          <p>40W foldable panel, ~100Wh battery, 12V DC & USB outputs, floodlight included.</p>
+          <div class="price">$250</div>
+          <div class="buyrow">
+            <label for="qty1" class="note">Qty</label>
+            <input id="qty1" class="qty" type="number" min="1" value="1">
+            <!-- Replace href with your Stripe Payment Link when ready -->
+            <a id="buyNow" class="cta primary" href="#" role="button">Buy Now</a>
+            <a class="cta" href="mailto:contact@hinterra.net?subject=Purchase%20Order%20Request&body=Product:%20Hinterra%20Portable%20Power%20Kit%0AQuantity:%20___%0AShipping%20Address:%20___%0AContact%20Phone:%20___">Email PO</a>
+          </div>
+          <p class="note">Need 25+ units? <a href="#contact">Contact us</a> for tiered pricing and lead times.</p>
+        </div>
+
+        <!-- Spare / Accessories (optional placeholders) -->
+        <div class="card">
+          <img class="thumb" src="thumb_cables.jpg" alt="12V cable & adapters" loading="lazy">
+          <h4>12V Cable & Adapter Set</h4>
+          <p>DC5521, polarity adapters, and extension lead.</p>
+          <div class="price">$19</div>
+          <div class="buyrow">
+            <input class="qty" type="number" min="1" value="1">
+            <a class="cta" href="#" role="button">Add</a>
+          </div>
+        </div>
+
+        <div class="card">
+          <img class="thumb" src="thumb_light.jpg" alt="Floodlight replacement" loading="lazy">
+          <h4>Floodlight Replacement</h4>
+          <p>Wide 120° beam, low-draw, quick-connect.</p>
+          <div class="price">$29</div>
+          <div class="buyrow">
+            <input class="qty" type="number" min="1" value="1">
+            <a class="cta" href="#" role="button">Add</a>
+          </div>
+        </div>
       </div>
+      <p class="note" style="margin-top:10px">All prices USD. Taxes/shipping calculated at checkout or on invoice.</p>
     </div>
+  </section>
 
-    <!-- Use Case 4: Community Engagement -->
-    <div style="display:flex; flex-wrap:wrap; align-items:center; gap:40px; flex-direction:row-reverse;">
-      <div style="flex:1; min-width:300px;"><img src="placeholder_community.jpg" alt="Community Engagement" style="width:100%; border-radius:10px;"></div>
-      <div style="flex:2; min-width:300px;">
-        <h3>Community Engagement </h3>
-        <p><strong>Problem:</strong> Villages near industrial sites often lack basic power, straining relationships.</p>
-        <p><strong>Solution:</strong> Donation-ready kits provide real value to schools, clinics, and households.</p>
-        <table>
-          <tr><th>Strategy</th><th>Cost per Unit</th><th>Impact</th></tr>
-          <tr><td>Grid Access Subsidy</td><td>$1,000–$3,000</td><td>Slow and expensive</td></tr>
-          <tr><td>Fuel Donation</td><td>$500+/year</td><td>Recurring, low visibility</td></tr>
-          <tr><td><strong>Hinterra Kit</strong></td><td><strong>$250</strong></td><td>Visible, immediate, long-term</td></tr>
-        </table>
-      </div>
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="container">
+      <h2>About Hinterra</h2>
+      <p class="lead">Rugged, portable power for harsh environments.</p>
+      <p>Our carry-on kits deliver clean solar energy in compact, field-ready cases. Trusted by remote construction crews, security teams, field medics, and exploration units. We design for one mission: dependable, off-grid power where it matters most.</p>
     </div>
+  </section>
 
-    <!-- Use Case 5: Transport Hubs -->
-    <div style="display:flex; flex-wrap:wrap; align-items:center; gap:40px;">
-      <div style="flex:1; min-width:300px;"><img src="placeholder_transport.webp" alt="Transport Checkpoints" style="width:100%; border-radius:10px;"></div>
-      <div style="flex:2; min-width:300px;">
-        <h3>Transport & Remote Checkpoint Hubs</h3>
-        <p><strong>Problem:</strong> Radios, scanners, and tablets often fail mid-operation due to lack of power.</p>
-        <p><strong>Solution:</strong> Stationary kits installed at logistics choke points ensure uptime and efficiency.</p>
-        <table>
-          <tr><th>Method</th><th>Cost per Hub</th><th>Risk Avoidance</th></tr>
-          <tr><td>Diesel Generator</td><td>$1,000–$1,400</td><td>Medium</td></tr>
-          <tr><td>Battery Rotation</td><td>$600+</td><td>High</td></tr>
-          <tr><td><strong>Hinterra Kit</strong></td><td><strong>$250</strong></td><td>Low</td></tr>
-        </table>
-      </div>
+  <!-- CONTACT -->
+  <section class="band" id="contact">
+    <div class="container">
+      <h2>Contact</h2>
+      <p class="lead">Questions, bulk orders, or partnership inquiries—reach out below.</p>
+      <form id="contactForm" action="mailto:contact@hinterra.net" method="post" enctype="text/plain">
+        <input type="text" name="name" placeholder="Name*" required>
+        <input type="email" name="email" placeholder="Email*" required>
+        <input type="text" name="company" placeholder="Company (optional)">
+        <textarea name="message" placeholder="How can we help?*" required></textarea>
+        <div class="buyrow">
+          <button type="submit" class="cta primary">Send</button>
+          <a class="cta" href="mailto:contact@hinterra.net?subject=Hinterra%20Inquiry">Open in Email</a>
+        </div>
+        <p class="note">Prefer WhatsApp or Signal? Mention it and we’ll reply with details.</p>
+      </form>
     </div>
-
-  </div>
-</section>
-
-
-    <!-- You can add more use cases here in the same format -->
-
-  </div>
-</section>
-
-<section>
-  <h2>About Hinterra</h2>
-  <p>
-    Hinterra builds rugged, portable power systems designed for reliability in the world’s harshest environments.
-    Our kits provide clean solar energy in compact cases—ready for field deployment in minutes.
-    <br><br>
-    Trusted by remote construction crews, security teams, field medics, and adventurers, our systems are engineered
-    for one mission: dependable, off-grid power where it matters most.
-  </p>
-</section>
+  </section>
+</main>
 
 <footer>
-  © 2025 Hinterra. All rights reserved.
+  <div class="container">© 2025 Hinterra. All rights reserved.</div>
 </footer>
 
 <script>
-  let currentSlide = 0;
-  const slides = document.querySelectorAll('.carousel-slide');
+  // Carousel
+  (function(){
+    const imgs = Array.from(document.querySelectorAll('.carousel img'));
+    let i = 0, timer = null;
+    const show = (n)=>{ i = (n + imgs.length) % imgs.length; imgs.forEach((im,k)=>im.classList.toggle('active', k===i)); };
+    const next = ()=>show(i+1), prev = ()=>show(i-1);
+    document.getElementById('nextBtn').addEventListener('click', next);
+    document.getElementById('prevBtn').addEventListener('click', prev);
 
-  function showSlide(index) {
-    slides.forEach((slide, i) => {
-      slide.classList.toggle('active', i === index);
+    // Auto-advance with pause on hover/focus
+    const wrap = document.querySelector('.carousel');
+    const start = ()=> timer = setInterval(next, 5000);
+    const stop  = ()=> { if(timer) clearInterval(timer); timer = null; };
+    wrap.addEventListener('mouseenter', stop); wrap.addEventListener('mouseleave', start);
+    wrap.addEventListener('focusin', stop);    wrap.addEventListener('focusout', start);
+    start();
+  })();
+
+  // Smooth-scroll active link highlighting
+  (function(){
+    const links = Array.from(document.querySelectorAll('[data-nav]'));
+    const ids = links.map(a => a.getAttribute('href')).filter(h => h.startsWith('#'));
+    const sections = ids.map(id => document.querySelector(id)).filter(Boolean);
+    const menu = document.getElementById('menu');
+
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(entry=>{
+        const id = '#' + entry.target.id;
+        const link = links.find(a => a.getAttribute('href') === id);
+        if(entry.isIntersecting){
+          links.forEach(a=>a.classList.remove('active'));
+          if(link) link.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-50% 0px -45% 0px', threshold: [0, 0.1, 0.5, 1] });
+
+    sections.forEach(sec => io.observe(sec));
+
+    // Optional: close mobile menu on click (if you add a hamburger later)
+    menu.addEventListener('click', e=>{
+      const t = e.target.closest('a[data-nav]');
+      if(!t) return;
+      // default smooth behavior handled by CSS
     });
-  }
+  })();
 
-  function nextSlide() {
-    currentSlide = (currentSlide + 1) % slides.length;
-    showSlide(currentSlide);
-  }
-
-  function prevSlide() {
-    currentSlide = (currentSlide - 1 + slides.length) % slides.length;
-    showSlide(currentSlide);
-  }
+  // Store: simple Buy Now handler
+  (function(){
+    const btn = document.getElementById('buyNow');
+    const qty = document.getElementById('qty1');
+    btn.addEventListener('click', (e)=>{
+      e.preventDefault();
+      const q = Math.max(1, parseInt(qty.value||'1',10));
+      // Replace this URL with your Stripe Payment Link, and append ?quantity=
+      // Example: const url = 'https://buy.stripe.com/your_link?quantity=' + q;
+      const url = '#'; // placeholder
+      if(url === '#'){
+        alert('Add your Stripe Payment Link in the code to enable checkout.\nFor now, use “Email PO”.');
+        return;
+      }
+      window.location.href = url;
+    });
+  })();
 </script>
 
 </body>
