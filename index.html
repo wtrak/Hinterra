@@ -322,7 +322,7 @@
         <div class="light-carousel" id="lightCarousel">
           <!-- Slide 1 -->
           <figure class="light-slide active">
-            <img src="Demo.1.jpg" alt="Subject No Illumination" loading="lazy">
+            <img src="Demo.1.jpg" alt="Subject No Illumination" loading="eager" decoding="async">
             <figcaption>Distance: <strong>25ft</strong> — Full-body no illumination.</figcaption>
           </figure>
           <!-- Slide 2 -->
@@ -527,58 +527,55 @@
     });
   })();
 
-  // Floodlight performance carousel (images)
-  (function(){
-    const root = document.getElementById('lightCarousel');
-    if(!root) return;
-    const slides = Array.from(root.querySelectorAll('.light-slide'));
-    const dotsWrap = document.getElementById('lightDots');
-    const prev = document.getElementById('lightPrev');
-    const next = document.getElementById('lightNext');
-    let i = 0, timer = null;
+<script>
+// Floodlight performance carousel (manual only)
+(function(){
+  const root = document.getElementById('lightCarousel');
+  if(!root) return;
+  const slides = Array.from(root.querySelectorAll('.light-slide'));
+  const dotsWrap = document.getElementById('lightDots');
+  const prev = document.getElementById('lightPrev');
+  const next = document.getElementById('lightNext');
+  let i = 0; // no timer
 
-    function show(n){
-      i = (n + slides.length) % slides.length;
-      slides.forEach((s, k)=> s.classList.toggle('active', k===i));
-      Array.from(dotsWrap.children).forEach((d,k)=> d.classList.toggle('active', k===i));
-    }
+  function show(n){
+    i = (n + slides.length) % slides.length;
+    slides.forEach((s, k)=> s.classList.toggle('active', k===i));
+    Array.from(dotsWrap.children).forEach((d,k)=> d.classList.toggle('active', k===i));
+  }
 
-    // Build dots
-    slides.forEach((_, idx)=>{
-      const dot = document.createElement('button');
-      dot.className = 'dot' + (idx===0 ? ' active' : '');
-      dot.type = 'button';
-      dot.setAttribute('aria-label', 'Show photo ' + (idx+1));
-      dot.addEventListener('click', ()=> show(idx));
-      dotsWrap.appendChild(dot);
-    });
+  // Build dots
+  slides.forEach((slide, idx)=>{
+    const dot = document.createElement('button');
+    dot.className = 'dot' + (idx===0 ? ' active' : '');
+    dot.type = 'button';
+    dot.setAttribute('aria-label', 'Show floodlight photo ' + (idx+1));
+    // If you want labeled dots (e.g., "25ft"), uncomment:
+    // dot.textContent = slide.querySelector('figcaption')?.innerText.match(/\d+\s?ft/i)?.[0] || (idx+1);
+    dot.addEventListener('click', ()=> show(idx));
+    dotsWrap.appendChild(dot);
+  });
 
-    prev.addEventListener('click', ()=> show(i-1));
-    next.addEventListener('click', ()=> show(i+1));
+  prev.addEventListener('click', ()=> show(i-1));
+  next.addEventListener('click', ()=> show(i+1));
 
-    // Keyboard
-    root.addEventListener('keydown', (e)=>{
-      if(e.key==='ArrowLeft')  show(i-1);
-      if(e.key==='ArrowRight') show(i+1);
-    });
-    root.setAttribute('tabindex', '0');
+  // Keyboard
+  root.addEventListener('keydown', (e)=>{
+    if(e.key==='ArrowLeft')  show(i-1);
+    if(e.key==='ArrowRight') show(i+1);
+  });
+  root.setAttribute('tabindex', '0');
 
-    // Touch swipe
-    let sx=0, dx=0;
-    root.addEventListener('touchstart', e=>{ sx = e.touches[0].clientX; }, {passive:true});
-    root.addEventListener('touchmove',  e=>{ dx = e.touches[0].clientX - sx; }, {passive:true});
-    root.addEventListener('touchend',  ()=>{ if(Math.abs(dx)>40){ dx<0 ? show(i+1) : show(i-1); } dx=0; });
+  // Touch swipe
+  let sx=0, dx=0;
+  root.addEventListener('touchstart', e=>{ sx = e.touches[0].clientX; }, {passive:true});
+  root.addEventListener('touchmove',  e=>{ dx = e.touches[0].clientX - sx; }, {passive:true});
+  root.addEventListener('touchend',  ()=>{ if(Math.abs(dx)>40){ dx<0 ? show(i+1) : show(i-1); } dx=0; });
 
-    // Auto-advance with pause on hover/focus
-    const start = ()=> timer = setInterval(()=> show(i+1), 6000);
-    const stop  = ()=> { if(timer) clearInterval(timer); timer = null; };
-    root.addEventListener('mouseenter', stop);
-    root.addEventListener('mouseleave', start);
-    root.addEventListener('focusin', stop);
-    root.addEventListener('focusout', start);
-    start();
-  })();
+  // No auto-advance (removed timer/start/stop)
+})();
 </script>
+
 
 </body>
 </html>
