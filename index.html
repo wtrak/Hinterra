@@ -98,6 +98,21 @@
     .card p{margin:0 0 10px; color:var(--muted); font-size:.95rem}
     .card .thumb{border-radius:8px; width:100%; aspect-ratio:16/9; object-fit:cover; border:1px solid var(--line); background:var(--soft)}
 
+    /* Floodlight performance carousel */
+    .light-wrap{margin-top:24px; border:1px solid var(--line); border-radius:12px; background:var(--bg)}
+    .light-header{display:flex; align-items:center; justify-content:space-between; padding:12px 14px; border-bottom:1px solid var(--line)}
+    .light-header h3{margin:0; font-size:1.1rem}
+    .light-carousel{position:relative; overflow:hidden; border-radius:0 0 12px 12px}
+    .light-slide{display:none; margin:0}
+    .light-slide.active{display:block}
+    .light-slide img{width:100%; display:block; aspect-ratio:16/9; object-fit:cover; background:var(--soft)}
+    .light-slide figcaption{padding:10px 14px; color:var(--muted); font-size:.95rem; border-top:1px solid var(--line)}
+    .light-ctrl{position:absolute; inset:0; display:flex; justify-content:space-between; align-items:center; pointer-events:none}
+    .light-ctrl button{pointer-events:auto; background:rgba(0,0,0,.6); color:#fff; border:none; padding:10px 12px; border-radius:8px; font-size:20px; cursor:pointer; margin:8px}
+    .dots{display:flex; gap:6px; padding:10px 14px; border-top:1px solid var(--line); flex-wrap:wrap}
+    .dot{width:10px; height:10px; border-radius:50%; border:1px solid var(--fg); opacity:.6; cursor:pointer}
+    .dot.active{background:var(--fg); opacity:1}
+
     /* Store */
     .store-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(280px,1fr)); gap:24px}
     .price{font-weight:700; font-size:1.2rem; margin:6px 0 12px}
@@ -267,7 +282,8 @@
   <section id="media">
     <div class="container">
       <h2>Media — How-To & Setup Guides</h2>
-      <p class="lead">Short videos and one-page setup guides for rapid deployment.</p>
+      <p class="lead">Short videos, one-page setup guides, and real-world floodlight performance.</p>
+
       <div class="media-grid">
         <!-- Video (self-hosted) -->
         <div class="card">
@@ -278,6 +294,7 @@
           <p>Step-by-step: connect DC5521 from panel to battery 12V/6A I/O, then power the floodlight.</p>
           <a class="cta" href="Quick Start (1).jpg" download>Download 1-Page Guide</a>
         </div>
+
         <!-- YouTube/Vimeo embed (optional) -->
         <div class="card">
           <iframe class="thumb" src="https://www.youtube.com/embed/VIDEO_ID?rel=0" title="Hinterra kit overview" allowfullscreen loading="lazy"></iframe>
@@ -285,6 +302,7 @@
           <p>What’s in the case, typical runtimes, and best-practice charging.</p>
           <a class="cta" href="Spec Sheet (1).jpg" download>Spec Sheet (PDF)</a>
         </div>
+
         <!-- More guides -->
         <div class="card">
           <img class="thumb" src="Screen Shot 2025-09-03 at 5.03.59 PM.png" alt="Troubleshooting guide" loading="lazy">
@@ -293,6 +311,53 @@
           <a class="cta" href="Hinterra_Troubleshooting_Guide.pdf" download>Download</a>
         </div>
       </div>
+
+      <!-- Floodlight Performance Carousel -->
+      <div class="light-wrap" aria-label="Floodlight performance carousel">
+        <div class="light-header">
+          <h3>Floodlight Performance — Real Photos</h3>
+          <div class="note">Swipe • Arrow keys • Tap dots</div>
+        </div>
+
+        <div class="light-carousel" id="lightCarousel">
+          <!-- Slide 1 -->
+          <figure class="light-slide active">
+            <img src="Demo.1.jpg" alt="Subject No Illumination" loading="lazy">
+            <figcaption>Distance: <strong>25ft</strong> — Full-body no illumination.</figcaption>
+          </figure>
+          <!-- Slide 2 -->
+          <figure class="light-slide">
+            <img src="Demo.25ft.jpg" alt="Subject illuminated at 25ft" loading="lazy">
+            <figcaption>Distance: <strong>25ft </strong> — Clear ID of subject.</figcaption>
+          </figure>
+          <!-- Slide 3 -->
+          <figure class="light-slide">
+            <img src="Demo.50ft.jpg" alt="Subject illuminated at 50ft" loading="lazy">
+            <figcaption>Distance: <strong>50ft </strong> — Readable posture and ID of subject.</figcaption>
+          </figure>
+          <!-- Slide 4 -->
+          <figure class="light-slide">
+            <img src="Demo.75ft.jpg" alt="Subject illuminated at 75ft" loading="lazy">
+            <figcaption>Distance: <strong>75ft </strong> — Subject visible at the edge of floodlight range.</figcaption>
+          </figure>
+          <!-- Slide 5 -->
+          <figure class="light-slide">
+            <img src="Demo.100ft.jpg" alt="Subject illuminated at 100ft" loading="lazy">
+            <figcaption>Distance: <strong>100ft </strong> — Situational awareness of subject.</figcaption>
+          </figure>
+
+          <div class="light-ctrl" aria-hidden="true">
+            <button type="button" id="lightPrev" aria-label="Previous floodlight photo">‹</button>
+            <button type="button" id="lightNext" aria-label="Next floodlight photo">›</button>
+          </div>
+        </div>
+
+        <div class="dots" id="lightDots" aria-label="Floodlight photo selectors">
+          <!-- Dots are generated by JS -->
+        </div>
+      </div>
+      <!-- /Floodlight Performance Carousel -->
+
     </div>
   </section>
 
@@ -380,21 +445,20 @@
 </footer>
 
 <script>
-  // Carousel
+  // Top hero carousel
   (function(){
     const imgs = Array.from(document.querySelectorAll('.carousel img'));
+    if(!imgs.length) return;
     let i = 0, timer = null;
     const show = (n)=>{ i = (n + imgs.length) % imgs.length; imgs.forEach((im,k)=>im.classList.toggle('active', k===i)); };
     const next = ()=>show(i+1), prev = ()=>show(i-1);
-    document.getElementById('nextBtn').addEventListener('click', next);
-    document.getElementById('prevBtn').addEventListener('click', prev);
-
-    // Auto-advance with pause on hover/focus
+    document.getElementById('nextBtn')?.addEventListener('click', next);
+    document.getElementById('prevBtn')?.addEventListener('click', prev);
     const wrap = document.querySelector('.carousel');
     const start = ()=> timer = setInterval(next, 5000);
     const stop  = ()=> { if(timer) clearInterval(timer); timer = null; };
-    wrap.addEventListener('mouseenter', stop); wrap.addEventListener('mouseleave', start);
-    wrap.addEventListener('focusin', stop);    wrap.addEventListener('focusout', start);
+    wrap?.addEventListener('mouseenter', stop); wrap?.addEventListener('mouseleave', start);
+    wrap?.addEventListener('focusin', stop);    wrap?.addEventListener('focusout', start);
     start();
   })();
 
@@ -403,6 +467,7 @@
     const links = Array.from(document.querySelectorAll('[data-nav]'));
     const ids = links.map(a => a.getAttribute('href')).filter(h => h.startsWith('#'));
     const sections = ids.map(id => document.querySelector(id)).filter(Boolean);
+    if(!sections.length) return;
 
     const io = new IntersectionObserver((entries)=>{
       entries.forEach(entry=>{
@@ -422,6 +487,7 @@
   (function(){
     const btn = document.getElementById('hamburger');
     const panel = document.getElementById('menuPanel');
+    if(!btn || !panel) return;
     const panelLinks = panel.querySelectorAll('a');
 
     function openMenu(){
@@ -446,11 +512,12 @@
   (function(){
     const btn = document.getElementById('buyNow');
     const qty = document.getElementById('qty1');
+    if(!btn || !qty) return;
     btn.addEventListener('click', (e)=>{
       e.preventDefault();
       const q = Math.max(1, parseInt(qty.value||'1',10));
       // Replace this URL with your Stripe Payment Link, and append ?quantity=
-      // Example: const url = 'https://buy.stripe.com/your_link?quantity=' + q;
+      // const url = 'https://buy.stripe.com/your_link?quantity=' + q;
       const url = '#'; // placeholder
       if(url === '#'){
         alert('Add your Stripe Payment Link in the code to enable checkout.\nFor now, use “Email PO”.');
@@ -458,6 +525,58 @@
       }
       window.location.href = url;
     });
+  })();
+
+  // Floodlight performance carousel (images)
+  (function(){
+    const root = document.getElementById('lightCarousel');
+    if(!root) return;
+    const slides = Array.from(root.querySelectorAll('.light-slide'));
+    const dotsWrap = document.getElementById('lightDots');
+    const prev = document.getElementById('lightPrev');
+    const next = document.getElementById('lightNext');
+    let i = 0, timer = null;
+
+    function show(n){
+      i = (n + slides.length) % slides.length;
+      slides.forEach((s, k)=> s.classList.toggle('active', k===i));
+      Array.from(dotsWrap.children).forEach((d,k)=> d.classList.toggle('active', k===i));
+    }
+
+    // Build dots
+    slides.forEach((_, idx)=>{
+      const dot = document.createElement('button');
+      dot.className = 'dot' + (idx===0 ? ' active' : '');
+      dot.type = 'button';
+      dot.setAttribute('aria-label', 'Show photo ' + (idx+1));
+      dot.addEventListener('click', ()=> show(idx));
+      dotsWrap.appendChild(dot);
+    });
+
+    prev.addEventListener('click', ()=> show(i-1));
+    next.addEventListener('click', ()=> show(i+1));
+
+    // Keyboard
+    root.addEventListener('keydown', (e)=>{
+      if(e.key==='ArrowLeft')  show(i-1);
+      if(e.key==='ArrowRight') show(i+1);
+    });
+    root.setAttribute('tabindex', '0');
+
+    // Touch swipe
+    let sx=0, dx=0;
+    root.addEventListener('touchstart', e=>{ sx = e.touches[0].clientX; }, {passive:true});
+    root.addEventListener('touchmove',  e=>{ dx = e.touches[0].clientX - sx; }, {passive:true});
+    root.addEventListener('touchend',  ()=>{ if(Math.abs(dx)>40){ dx<0 ? show(i+1) : show(i-1); } dx=0; });
+
+    // Auto-advance with pause on hover/focus
+    const start = ()=> timer = setInterval(()=> show(i+1), 6000);
+    const stop  = ()=> { if(timer) clearInterval(timer); timer = null; };
+    root.addEventListener('mouseenter', stop);
+    root.addEventListener('mouseleave', start);
+    root.addEventListener('focusin', stop);
+    root.addEventListener('focusout', start);
+    start();
   })();
 </script>
 
